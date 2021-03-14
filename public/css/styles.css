@@ -1,0 +1,67 @@
+html{
+  position: relative;
+  font-family: sans-serif;
+}
+
+body{
+  background-color: #c0c0c0
+}
+
+h1, h2, h3{
+  font-size: 35pt;
+  line-height: 1.5;
+  padding: 10px;
+}
+
+p{
+  font-size: 22pt;
+  font-family: sans-serif;
+  padding-top: 20px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+label{
+  font-size: 20pt;
+}
+
+.row{
+  text-align: center;
+  margin: auto;
+  width: auto;
+}
+
+/* Start page */
+
+.client-button{
+  height: 100px;
+  width: 200px;
+  margin: 20px;
+  font-size: 35pt;
+}
+
+.volunteer-button{
+  height: 100px;
+  width: 250px;
+  margin: 20px;
+  font-size: 35pt;
+}
+
+/* Client Login */
+
+.submit-button{
+  height: 100px;
+  width: 200px;
+  margin: 20px;
+  font-size: 35pt;
+}
+
+.signup-button{
+  height: 50px;
+  width: 150px;
+  margin: 10px;
+  font-size: 20pt;
+}
