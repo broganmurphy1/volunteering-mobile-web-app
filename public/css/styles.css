@@ -13,10 +13,15 @@ h1, h2, h3{
   padding: 10px;
 }
 
+h4{
+  text-align: center;
+  margin: 10px;
+}
+
 p{
   font-size: 22pt;
   font-family: sans-serif;
-  padding-top: 20px;
+  margin: 20px;
 }
 
 a {
@@ -25,13 +30,11 @@ a {
 }
 
 label{
-  font-size: 20pt;
+  font-size: 15pt;
 }
 
 .row{
   text-align: center;
-  margin: auto;
-  width: auto;
 }
 
 /* Start page */
@@ -52,7 +55,7 @@ label{
 
 /* Client Login */
 
-.submit-button{
+.login-button{
   height: 100px;
   width: 200px;
   margin: 20px;
@@ -63,5 +66,83 @@ label{
   height: 50px;
   width: 150px;
   margin: 10px;
+  font-size: 20pt;
+}
+
+.error-msg{
+  background-color: #fce4e4;
+  border: 1px solid #fcc2c3;
+  color: red;
+}
+
+/* Client create account */
+
+.form-control{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.text-area{
+  margin: 5px;
+}
+
+.createaccount-button{
+  margin: 10px;
+  text-align: center;
+  height: 75px;
+  width: 125px;
+}
+
+.email-textbox{
+  margin: 5px;
+}
+
+.password-textbox{
+  margin: 5px;
+}
+
+.username-textbox{
+  margin: 5px;
+}
+/* Client Account Success & Failure*/
+
+.div-successorfailure{
+  text-align: center;
+}
+
+/* Client-home */
+
+.post-a-job-button{
+  height: 75px;
+  width: 190px;
+  margin: 20px;
+  font-size: 20pt;
+}
+
+.your-job-activity-button{
+  height: 75px;
+  width: 190px;
+  margin: 20px;
+  font-size: 20pt;
+}
+
+.settings-button{
+  height: 75px;
+  width: 190px;
+  margin: 20px;
+  font-size: 20pt;
+}
+
+.help-guide-button{
+  height: 75px;
+  width: 190px;
+  margin: 20px;
+  font-size: 20pt;
+}
+
+.logout-button{
+  height: 75px;
+  width: 190px;
+  margin: 20px;
   font-size: 20pt;
 }
