@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
     <title>Client Login</title>
@@ -15,17 +15,17 @@
     <section class="col-12 col-sm-6 col-md-4">
       <form class="form-container" action="/client-login" method="post">
         <div class="form-group">
-          <h1 class="text-center font-weight-bold"> Login</h1>
+          <h2 class="text-center font-weight-bold client-login-header">Client Login</h2>
           <input type="email" class="form-control" placeholder="Enter email" name="username">
         </div>
         <div class="form-group">
           <input type="password" class="form-control" placeholder="Password" name="password">
         </div>
-        <button type="submit" class="btn btn-primary login-button">Login</button>
+        <button type="submit" class="btn btn-primary login-button"><i class="fas fa-sign-in-alt"></i>  Login</button>
       </form>
         <div class="form-footer">
           <p> Don't have an account?</p>
-          <button type="button" class="btn btn-outline-primary signup-button"><a href="/client-create-account">Sign Up</a></button>
+          <button type="button" class="btn btn-outline-primary signup-button"><a href="/client-create-account"><i class="fas fa-user-plus"></i>  Sign Up</a></button>
 
           <% for(let i=0; i < errors.length; i++) {%>
             <p class="error-msg"><%= errors[i] %></p>
@@ -34,5 +34,6 @@
       </section>
     </section>
   </section>
+  <button type="button" class="btn btn-secondary go-back-button"><a href="/"><i class="fas fa-arrow-left"></i>  Go Back</a></button>
   </body>
 </html>

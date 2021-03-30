@@ -1,10 +1,16 @@
 html{
   position: relative;
   font-family: sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body{
-  background-color: #c0c0c0
+  background-color: #c0c0c0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 h1, h2, h3{
@@ -21,7 +27,7 @@ h4{
 p{
   font-size: 22pt;
   font-family: sans-serif;
-  margin: 20px;
+  margin: 10px;
 }
 
 a {
@@ -29,42 +35,48 @@ a {
   text-decoration: none;
 }
 
-label{
-  font-size: 15pt;
-}
-
 .row{
   text-align: center;
+  margin: auto;
+  width: auto;
+}
+
+.go-back-button{
+  margin: 25px;
 }
 
 /* Start page */
 
 .client-button{
-  height: 100px;
-  width: 200px;
+  height: 75px;
+  width: 150px;
   margin: 20px;
-  font-size: 35pt;
+  font-size: 25pt;
 }
 
 .volunteer-button{
-  height: 100px;
-  width: 250px;
+  height: 75px;
+  width: 220px;
   margin: 20px;
-  font-size: 35pt;
+  font-size: 25pt;
 }
 
 /* Client Login */
 
+.client-login-header{
+  font-size: 30pt;
+}
+
 .login-button{
   height: 100px;
   width: 200px;
-  margin: 20px;
+  margin: 15px;
   font-size: 35pt;
 }
 
 .signup-button{
   height: 50px;
-  width: 150px;
+  width: 175px;
   margin: 10px;
   font-size: 20pt;
 }
@@ -115,34 +127,65 @@ label{
 .post-a-job-button{
   height: 75px;
   width: 190px;
-  margin: 20px;
+  margin: 10px;
   font-size: 20pt;
 }
 
-.your-job-activity-button{
+.view-job-activity-button{
   height: 75px;
-  width: 190px;
-  margin: 20px;
+  width: 250px;
+  margin: 10px;
   font-size: 20pt;
 }
 
 .settings-button{
   height: 75px;
   width: 190px;
-  margin: 20px;
+  margin: 10px;
   font-size: 20pt;
 }
 
 .help-guide-button{
   height: 75px;
   width: 190px;
-  margin: 20px;
+  margin: 10px;
   font-size: 20pt;
 }
 
 .logout-button{
   height: 75px;
   width: 190px;
-  margin: 20px;
+  margin: 10px;
   font-size: 20pt;
+}
+
+/* client-post-job */
+
+#mapholder{
+  margin: 10px;
+  height: 100%;
+  width: 100%;
+}
+
+
+.postjob-button{
+  margin: 10px;
+  text-align: center;
+  height: 75px;
+  width: 250px;
+  font-size: 25px;
+}
+
+.postjob-text{
+  font-size: 15pt;
+  text-align: center;
+}
+
+.modal-btn{
+  width: 50px;
+}
+
+.modal-btn-back{
+  width: 130px;
+  text-align: center;
 }

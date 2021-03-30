@@ -12,6 +12,7 @@ passportLocalMongoose = require("passport-local-mongoose");
 Client = require("./models/client");
 const flash = require("connect-flash");
 const session = require('express-session');
+const nodeGeocoder = require('node-geocoder');
 
 mongoose.connect("mongodb://localhost:27017/VolunteerDB", {useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log('connected'))
 .catch((err)=> console.log(err));
@@ -54,13 +55,17 @@ passport.use(new LocalStrategy({
   }
 ));
 
-
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 
 passport.deserializeUser((id, done) => {
   done(null, { id });
+});
+
+var geocoder = nodeGeocoder({
+  provider: 'opencage',
+  apiKey: process.env.API_KEY
 });
 
 // ROUTES
@@ -118,18 +123,25 @@ const ensureAuthenticated = (req, res, next) => {
 }
 
 app.get("/client-home", ensureAuthenticated, function(req, res) {
-
-  if(ensureAuthenticated)
-  {
     res.render("client-home", {user: req.session.user.clientFullName});
-  }
 })
 
 app.get('/client-logout', function(req, res){
   req.logout();
-  res.redirect('/');
+  res.redirect('/client-login');
 });
 
+app.get("/client-post-job", ensureAuthenticated, function(req, res){
+  res.render("client-post-job");
+});
+
+app.post("/client-post-job", function(req, res) {
+  console.log(req.body);
+  console.log(req.session.user);
+  geocoder.geocode(req.body.clientJobArea + ', ' + req.body.clientJobCity + ', ' + req.body.clientJobCountry  , function(err, res) {
+  console.log(res);
+});
+})
 
 app.listen(3000, function(){
   console.log("Server started on port 3000");

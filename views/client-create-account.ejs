@@ -4,6 +4,7 @@
     <title>Signup Form</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 
@@ -75,7 +76,7 @@
 
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary btn-lg createaccount-button" data-toggle="modal" data-target="#modalLarge">Create Account</button>
+            <button type="button" class="btn btn-primary btn-lg createaccount-button" data-toggle="modal" data-target="#modalLarge"><i class="fas fa-user-plus"></i>  Create Account</button>
           </div>
         </div>
 
@@ -83,7 +84,6 @@
               <div class="modal-dialog" role="document">
               <div class="modal-content">
               <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4 class="modal-title" id="modalLargeLabel">Confirm Details</h4>
             </div>
             <div class="modal-body">
@@ -93,7 +93,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Let me double check</button>
-              <button type="submit" class="btn btn-default btn-primary" data-glyphicon="glyphicon-ok">Create Account</button>
+              <button type="submit" class="btn btn-default btn-primary" data-glyphicon="glyphicon-ok"><i class="fas fa-user-plus"></i>  Create Account</button>
             </div>
           </div>
         </div>
@@ -135,5 +135,6 @@
         }
     }
     </script>
+    <button type="button" class="btn btn-secondary go-back-button"><a href="/client-login"><i class="fas fa-arrow-left"></i>  Go Back</a></button>
   </body>
 </html>

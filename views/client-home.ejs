@@ -1,50 +1,45 @@
 <!DOCTYPE html>
   <%- include("partials/header"); -%>
-    <h4>Hello, <%= user %></h4>
+    <h4>Hello, <%= user %> </h4>
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col">
+        <div class="col-lg mx-auto">
           <button type="button" class="btn btn-success post-a-job-button"> <a href="/client-post-job"><i class="fas fa-plus-square"></i>  Post a Job<a> </button>
-        <div class="col">
-          <button type="button" class="btn btn-primary view-previous-ongoing-jobs-button"> <a href="/client-job-activity"><i class="fas fa-history"></i></i>  View Previous/Ongoing jobs<a></button>
+          <button type="button" class="btn btn-primary view-job-activity-button"> <a href="/client-job-activity"><i class="fas fa-history"></i></i>  View Job Activity<a></button>
         </div>
+      </div>
+
+    <div class="row">
+      <div class="col-lg mx-auto">
+        <button type="button" class="btn btn-info settings-button"><a href="/client-settings"><i class="fas fa-cogs"></i>  Settings<a> </button>
+        <button type="button" class="btn btn-secondary help-guide-button"><a href="/client-help-guide"><i class="fas fa-question"></i>  Help Guide<a> </button>
+      </div>
     </div>
 
-          </div>
-          <div class="row">
-            <div class="col-lg mx-auto">
-              <button type="button" class="btn btn-info settings-button"><a href="/client-settings"><i class="fas fa-cogs"></i>  Settings<a> </button>
-                <button type="button" class="btn btn-secondary help-guide-button"><a href="/client-help-guide"><i class="fas fa-question"></i>  Help Guide<a> </button>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg mx-auto">
-              <button type="button" class="btn btn-danger logout-button" data-toggle="modal" data-target="#modalLarge"><i class="fas fa-sign-out-alt"></i>  Logout<a> </button>
-            </div>
-          </div>
+    <div class="row">
+      <div class="col-lg mx-auto">
+        <button type="button" class="btn btn-danger logout-button" data-toggle="modal" data-target="#modalLarge"><i class="fas fa-sign-out-alt"></i>  Logout<a> </button>
       </div>
+    </div>
+  </div>
 
-      <div class="modal fade modal-fullscreen" id="modalLarge" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel" link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content">
+  <div class="modal fade modal-fullscreen" id="modalLarge" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
         <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="modalLargeLabel">Confirm Details</h4>
+          <h4 class="modal-title" id="modalLargeLabel">Confirm Action</h4>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to log out?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Don't log me out</button>
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalLarge"><a href="/client-logout"><i class="fas fa-sign-out-alt"></i>  Logout<a> </button>
+        </div>
       </div>
-      <div class="modal-body">
-        <p>
-        Are the details you have provided correct?
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Let me double check</button>
-        <button type="submit" class="btn btn-default btn-primary" data-glyphicon="glyphicon-ok">Create Account</button>
-      </div>
-      </div>
-      </div>
-      </div>
+    </div>
+  </div>
 
 
 
