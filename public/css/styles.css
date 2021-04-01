@@ -85,6 +85,7 @@ a {
   background-color: #fce4e4;
   border: 1px solid #fcc2c3;
   color: red;
+  text-align: center;
 }
 
 /* Client create account */
@@ -167,7 +168,6 @@ a {
   width: 100%;
 }
 
-
 .postjob-button{
   margin: 10px;
   text-align: center;
@@ -188,4 +188,17 @@ a {
 .modal-btn-back{
   width: 130px;
   text-align: center;
+}
+
+.city-div{
+  margin-top: 10px;
+}
+
+/* client-job-success */
+
+.job-success-home-btn{
+  height: 100px;
+  width: 220px;
+  margin: 15px;
+  font-size: 35pt;
 }

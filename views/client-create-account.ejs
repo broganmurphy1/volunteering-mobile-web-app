@@ -17,23 +17,29 @@
 
         <h4>Enter your personal details:</h4>
 
+        <% for(let i=0; i < errors.length; i++) {%>
+          <p class="error-msg"><%= errors[i] %></p>
+        <%}%>
+
         <div class="row">
           <div class="col">
-            <input type="text" class="form-control" placeholder="Full name" name="clientFullName" required>
+            <label>*Name</label>
+            <input type="text" class="form-control" placeholder="Full name" name="clientFullName">
           </div>
           <div class="col">
-            <input type="tel" class="form-control" placeholder="Contact Number" name="clientContactNumber" pattern="((\+44(\s\(0\)\s|\s0\s|\s)?)|0)7\d{3}(\s)?\d{6}" required>
+            <label>*Contact Number</label>
+            <input type="tel" class="form-control" placeholder="Contact Number" name="clientContactNumber">
           </div>
         </div>
 
         <div class="row">
           <div class="col-6">
-            <label>Address</label>
-            <input type="text" class="form-control" placeholder="e.g. 12 Main St" name="clientAddressOne" required>
+            <label>*Address</label>
+            <input type="text" class="form-control" placeholder="e.g. 12 Main St" name="clientAddressOne">
           </div>
           <div class="col-6">
-            <label>Postcode</label>
-            <input type="text" class="form-control" placeholder="e.g. EH12 7UF" name="clientPostcode" required>
+            <label>*Postcode</label>
+            <input type="text" class="form-control" placeholder="e.g. EH12 7UF" name="clientPostcode">
           </div>
         </div>
 
@@ -43,8 +49,8 @@
             <input type="text" class="form-control" placeholder="Apartment, studio, or floor (if applicable)" name="clientAddressTwo">
           </div>
             <div class="col-6">
-              <label>City</label>
-              <input type="text" class="form-control" placeholder="e.g. Edinburgh" name="clientCity" required>
+              <label>*City</label>
+              <input type="text" class="form-control" placeholder="e.g. Edinburgh" name="clientCity">
             </div>
         </div>
 
@@ -59,17 +65,17 @@
 
         <div class="row">
           <div class="col email-textbox">
-            <input type="email" class="form-control" name="clientEmail" placeholder="Email Address" required>
+            <input type="email" class="form-control" name="clientEmail" placeholder="*Email Address">
           </div>
         </div>
 
         <div class="row">
           <div class="col password-textbox">
-            <input type="password" class="form-control" id="password" placeholder="Password" name="clientPassword" required>
+            <input type="password" class="form-control" id="password" placeholder="*Password" name="clientPassword">
             <input type="checkbox" onclick="showPassword()">Show Password
           </div>
           <div class="col password-textbox">
-            <input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password" required>
+            <input type="password" class="form-control" id="confirm_password" placeholder="*Confirm Password" name="clientConfirmPassword">
             <input type="checkbox" onclick="showConfirmPassword()">Show Password
           </div>
         </div>
@@ -101,16 +107,16 @@
     </form>
 
     <script type="text/javascript">
-      var password = document.getElementById("password")
-      ,confirm_password = document.getElementById("confirm_password");
-
-    function validatePassword(){
-      if(password.value != confirm_password.value) {
-        confirm_password.setCustomValidity("Passwords Don't Match");
-      } else {
-        confirm_password.setCustomValidity('');
-      }
-    }
+    //   var password = document.getElementById("password")
+    //   ,confirm_password = document.getElementById("confirm_password");
+    //
+    // // function validatePassword(){
+    // //   if(password.value != confirm_password.value) {
+    // //     confirm_password.setCustomValidity("Passwords Don't Match");
+    // //   } else {
+    // //     confirm_password.setCustomValidity('');
+    // //   }
+    // // }
 
   password.onchange = validatePassword;
   confirm_password.onkeyup = validatePassword;
