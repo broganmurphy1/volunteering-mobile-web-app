@@ -14,7 +14,8 @@ ClientJob = require("./models/clientjob");
 const flash = require("connect-flash");
 const session = require('express-session');
 const nodeGeocoder = require('node-geocoder');
-require("dotenv").config()
+require("dotenv").config();
+const methodOverride = require('method-override');
 
 mongoose.connect("mongodb://localhost:27017/VolunteerDB", {useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log('connected'))
 .catch((err)=> console.log(err));
@@ -25,6 +26,16 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+app.use(methodOverride(function (req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    var method = req.body._method
+    delete req.body._method
+    return method
+  }
+}))
+
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(flash());
@@ -202,7 +213,8 @@ app.post("/client-post-job", function(req, res) {
             clientName: req.session.user.clientFullName,
             clientContactNumber: req.session.user.clientContactNumber,
             clientMedCondition: req.session.user.clientMedCondition
-          }
+          },
+          jobStatus: "Available"
         });
         newClientJob.save(function(err) {
           if(err){
@@ -237,10 +249,12 @@ app.post("/client-post-job", function(req, res) {
         },
         clientJobDesc: req.body.clientJobDesc,
         clientDetails: {
+          clientID: req.session.user._id,
           clientName: req.session.user.clientFullName,
           clientContactNumber: req.session.user.clientContactNumber,
           clientMedCondition: req.session.user.clientMedCondition
-        }
+        },
+        jobStatus: "Available"
       });
       newClientJob.save(function(err) {
         if(err){
@@ -253,6 +267,94 @@ app.post("/client-post-job", function(req, res) {
       })
     }
   }
+})
+
+app.get("/client-job-activity", ensureAuthenticated, function(req, res){
+  console.log(req.session.user);
+
+  ClientJob.find({"clientDetails.clientID": req.session.user._id}, function(err, jobs) {
+    res.render("client-job-activity", {jobs: jobs});
+  })
+})
+
+app.get("/jobs/:jobId", ensureAuthenticated, function(req, res){
+  const errors = req.flash().error || [];
+  const requestedJobId = req.params.jobId
+
+  console.log(requestedJobId);
+
+  ClientJob.findOne({_id: requestedJobId}, function(err, job) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      const coordinates = job.location.coordinates[0] + ', ' + job.location.coordinates[1];
+      geocoder.geocode(coordinates, function(err, results) {
+        console.log(results);
+        res.render("job", {
+          jobLocation: results[0].zipcode,
+          jobDescription: job.clientJobDesc,
+          jobID: job._id,
+          errors
+        })
+      })
+    }
+  })
+})
+
+app.put("/jobs/:jobId", function(req, res){
+  const requestedJobId = req.params.jobId;
+  const split = requestedJobId.split(":");
+
+  const splitRequestedJobId = split[1];
+  console.log(splitRequestedJobId);
+
+  ClientJob.findOne({_id: splitRequestedJobId}, function(err, job) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      if(!req.body.clientJobLocation || !req.body.clientJobDesc) {
+        req.flash('error', "Please make sure all required fields are filled in and you have specified your location correctly");
+        res.redirect('/jobs/' + splitRequestedJobId);
+      }
+      else {
+        geocoder.geocode(req.body.clientJobLocation + ', ' + req.body.clientJobCountry, function(err, results) {
+          var lat = results[0].latitude;
+          var lon = results[0].longitude;
+
+          job.clientJobDesc = req.body.clientJobDesc;
+          job.location.coordinates = [parseFloat(lat), parseFloat(lon)];
+          job.save(function(err, savedJob) {
+            if(err) {
+              console.log(err);
+            }
+            else {
+              console.log(savedJob);
+              res.render("client-job-edit-success");
+            }
+          })
+        });
+      }
+    }
+  });
+})
+
+app.delete("/jobs/:jobId", function(req, res){
+  const requestedJobId = req.params.jobId;
+  const split = requestedJobId.split(":");
+
+  const splitRequestedJobId = split[1];
+  console.log(splitRequestedJobId);
+
+  ClientJob.deleteOne({_id: splitRequestedJobId}, function(err) {
+    if(err) {
+      console.log(err);
+    }
+    else{
+      res.render("client-job-delete-success");
+    }
+  });
 })
 
 app.listen(3000, function(){

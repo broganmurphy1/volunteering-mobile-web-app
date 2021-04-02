@@ -202,3 +202,42 @@ a {
   margin: 15px;
   font-size: 35pt;
 }
+
+/* client-job-activity */
+
+.client-jobs {
+  background-color: #f4f9f9;
+  margin: 10px;
+  border-style: solid;
+}
+
+.client-job-activity-header {
+  font-size: 20pt;
+  text-align: center;
+}
+
+.view-job-activity-btn {
+  margin: 10px;
+}
+
+.no-job-text{
+  font-size: 22pt;
+}
+
+.no-job-div {
+  text-align: center;
+}
+
+/* job page*/
+
+.job-div {
+  margin: 10px;
+}
+
+.edit-btn {
+  margin: 10px;
+}
+
+.delete-btn {
+  margin: 10px;
+}

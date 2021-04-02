@@ -13,7 +13,7 @@ const ClientJobSchema = new mongoose.Schema({
     clientContactNumber: String,
     clientMedCondition: String
   },
-  //timePosted:{ type : Date, default: Date.now }
+  jobStatus: String
 });
 
 ClientJobSchema.index({location: "2dsphere"});

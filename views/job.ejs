@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<%- include("partials/header"); -%>
+
+  <h4>You can edit the details of the job below:</h4>
+
+  <% for(let i=0; i < errors.length; i++) {%>
+    <p class="error-msg"><%= errors[i] %></p>
+  <%}%>
+
+  <form action="/jobs/:<%=jobID%>" method="post">
+  <input type="hidden" name='_method' value="put">
+      <div class="row job-div">
+        <div class="col">
+          <input type="text" class="form-control" name="clientJobLocation" value="<%=jobLocation%>">
+        </div>
+      </div>
+
+      <input type="hidden" name="clientJobCountry" value="United Kingdom">
+
+      <div class="row job-div">
+        <div class="col">
+          <input type="text" class="form-control" name="clientJobDesc" value="<%=jobDescription%>">
+        </div>
+      </div>
+
+      <div class="row job-div">
+        <div class="col">
+          <button type="button" class="btn btn-primary btn-lg edit-btn" data-toggle="modal" data-target="#modalLarge4"><i class="fas fa-edit"></i>  Edit Job</button>
+        </div>
+      </div>
+
+      <div class="modal fade modal-fullscreen" id="modalLarge4" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title" id="modalLargeLabel">Confirm Details</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure the details you've entered are correct?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Let me double check</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i>  Edit Job</button>
+      </div>
+      </div>
+      </div>
+      </div>
+
+  </form>
+
+  <h4>Or you can delete this job using the button below:</h4>
+
+  <form method="post" action="/jobs/:<%=jobID%>">
+
+    <input type="hidden" name="_method" value="DELETE">
+
+    <div class="row job-div">
+      <div class="col">
+        <button type="button" class="btn btn-danger btn-lg delete-btn" data-toggle="modal" data-target="#modalLarge5"><i class="fas fa-trash-alt"></i>  Delete Job<a> </button>
+      </div>
+    </div>
+
+    <div class="modal fade modal-fullscreen" id="modalLarge5" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalLargeLabel">Confirm Action</h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete this job? This action is irreversible</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Go back</button>
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>  Delete Job</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <button type="button" onclick="history.back(-1)" class="btn btn-secondary go-back-button"><i class="fas fa-arrow-left"></i>  Go Back</a></button>
+  </body>
+</html>
