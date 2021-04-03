@@ -20,6 +20,7 @@ h1, h2, h3{
 }
 
 h4{
+  font-size: 24pt;
   text-align: center;
   margin: 10px;
 }
@@ -140,10 +141,11 @@ a {
 }
 
 .settings-button{
-  height: 75px;
+  height: 100px;
   width: 190px;
   margin: 10px;
   font-size: 20pt;
+  white-space: normal;
 }
 
 .help-guide-button{
@@ -240,4 +242,24 @@ a {
 
 .delete-btn {
   margin: 10px;
+}
+
+/* client-contact-details */
+
+.add-contact-btn {
+  margin: 10px;
+}
+
+/* help-guide */
+
+.help-guide-text {
+  font-size: 18pt;
+}
+
+.help-guide-btn{
+  height: 105px;
+  width: 140px;
+  margin: 10px;
+  font-size: 15pt;
+  white-space: normal;
 }

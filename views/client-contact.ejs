@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <%- include("partials/header"); -%>
 
-  <h4>You can edit the details of the job below:</h4>
-
   <% for(let i=0; i < errors.length; i++) {%>
     <p class="error-msg"><%= errors[i] %></p>
   <%}%>
 
-  <form action="/jobs/:<%=jobID%>" method="post">
+  <form action="/client-emergency-contact-details/:<%=clientID%>" method="post">
   <input type="hidden" name='_method' value="put">
+
+    <div class="row job-div">
+      <div class="col">
+        <h4 class="client-contact-details-header">You can edit your emergency's contact details below:</h4>
+      </div>
+    </div>
+
       <div class="row job-div">
         <div class="col">
-          <input type="text" class="form-control" name="clientJobLocation" value="<%=jobLocation%>">
+          <input type="text" class="form-control" name="emergencyContactName" value="<%=clientContactName%>">
         </div>
       </div>
 
@@ -19,17 +24,23 @@
 
       <div class="row job-div">
         <div class="col">
-          <input type="text" class="form-control" name="clientJobDesc" value="<%=jobDescription%>">
+          <input type="text" class="form-control" name="emergencyContactTelNo" value="<%=clientContactTelNo%>">
         </div>
       </div>
 
       <div class="row job-div">
         <div class="col">
-          <button type="button" class="btn btn-primary btn-lg edit-btn" data-toggle="modal" data-target="#modalLarge4"><i class="fas fa-edit"></i>  Edit Job/Activity</button>
+          <input type="text" class="form-control" name="emergencyContactRelation" value="<%=clientContactRelation%>">
         </div>
       </div>
 
-      <div class="modal fade modal-fullscreen" id="modalLarge4" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+      <div class="row job-div">
+        <div class="col">
+          <button type="button" class="btn btn-primary btn-lg edit-btn" data-toggle="modal" data-target="#modalLarge5"><i class="fas fa-edit"></i>  Edit Contact Details</button>
+        </div>
+      </div>
+
+      <div class="modal fade modal-fullscreen" id="modalLarge5" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -48,30 +59,33 @@
 
   </form>
 
-  <h4>Or you can delete this job using the button below:</h4>
+  <h4>Or you can remove this contact's details using the button below:</h4>
 
-  <form method="post" action="/jobs/:<%=jobID%>">
+  <form method="post" action="/client-emergency-contact-details/:<%=clientID%>">
 
-    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_method" value="delete">
 
     <div class="row job-div">
       <div class="col">
-        <button type="button" class="btn btn-danger btn-lg delete-btn" data-toggle="modal" data-target="#modalLarge5"><i class="fas fa-trash-alt"></i>  Delete Job/Activity<a> </button>
+        <input type="hidden" name="blankContactName" value="">
+        <input type="hidden" name="blankContactTelNo" value="">
+        <input type="hidden" name="blankContactRelation" value="">
+        <button type="button" class="btn btn-danger btn-lg delete-btn" data-toggle="modal" data-target="#modalLarge6"><i class="fas fa-trash-alt"></i>  Delete Contact Details<a> </button>
       </div>
     </div>
 
-    <div class="modal fade modal-fullscreen" id="modalLarge5" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+    <div class="modal fade modal-fullscreen" id="modalLarge6" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" id="modalLargeLabel">Confirm Action</h4>
           </div>
           <div class="modal-body">
-            <p>Are you sure you want to delete this job? This action is irreversible</p>
+            <p>Are you sure you want to delete your emergency contact? This action is irreversible</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Go back</button>
-            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>  Delete</button>
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i>  Delete Contact</button>
           </div>
         </div>
       </div>

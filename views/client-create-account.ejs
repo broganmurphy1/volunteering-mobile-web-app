@@ -82,15 +82,15 @@
 
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary btn-lg createaccount-button" data-toggle="modal" data-target="#modalLarge"><i class="fas fa-user-plus"></i>  Create Account</button>
+            <button type="button" class="btn btn-primary btn-lg createaccount-button" data-toggle="modal" data-target="#modalLargeCurrentLocation"><i class="fas fa-user-plus"></i>  Create Account</button>
           </div>
         </div>
 
-            <div class="modal fade modal-fullscreen" id="modalLarge" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+            <div class="modal fade modal-fullscreen" id="modalLargeCurrentLocation" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
               <div class="modal-dialog" role="document">
               <div class="modal-content">
               <div class="modal-header">
-              <h4 class="modal-title" id="modalLargeLabel">Confirm Details</h4>
+              <h4 class="modal-title" id="modalLargeLabel">Confirm Action</h4>
             </div>
             <div class="modal-body">
               <p>
@@ -105,22 +105,6 @@
         </div>
       </div>
     </form>
-
-    <script type="text/javascript">
-    //   var password = document.getElementById("password")
-    //   ,confirm_password = document.getElementById("confirm_password");
-    //
-    // // function validatePassword(){
-    // //   if(password.value != confirm_password.value) {
-    // //     confirm_password.setCustomValidity("Passwords Don't Match");
-    // //   } else {
-    // //     confirm_password.setCustomValidity('');
-    // //   }
-    // // }
-
-  password.onchange = validatePassword;
-  confirm_password.onkeyup = validatePassword;
-    </script>
 
     <script>
     function showPassword() {

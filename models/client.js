@@ -15,6 +15,11 @@ const ClientSchema = new mongoose.Schema({
   clientAddressTwo: String,
   clientCity: String,
   clientMedCondition: String,
+  clientEmergencyContact: {
+    contactName: String,
+    contactTelNo: String,
+    relationToClient: String
+  },
   username: String,
   password: String
 });

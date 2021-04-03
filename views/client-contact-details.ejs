@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<%- include("partials/header"); -%>
+
+  <h1 class="client-job-activity-header">Your emergency contact:</h1>
+      <% if(!clients[0].clientEmergencyContact.contactName){ %>
+        <div id="noJobDiv" class="no-job-div">
+          <p class="no-job-text">You have not added an emergency contact, you can do so below.</p>
+        </div>
+<% } else { %>
+  <%  clients.forEach(function(client){ %>
+    <div class="client-jobs">
+      <h4><%=client.clientEmergencyContact.contactName%></h4>
+      <p><%=client.clientEmergencyContact.contactTelNo%></p>
+      <p><%=client.clientEmergencyContact.relationToClient%></p>
+      <button type="button" class="btn btn-primary view-job-activity-btn" name="button"><a href="/client-emergency-contact-details/<%=client._id%>"><i class="fas fa-address-book"></i>  Edit/Delete Contact</a></button>
+      <% }) %>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      <script>
+        $(document).ready(function(){
+          $("#add-contact-div").remove();
+        });
+      </script>
+    </div>
+<% } %>
+
+  <div id="add-contact-div">
+    <h4>Add your emergency contact:</h4>
+
+    <% for(let i=0; i < errors.length; i++) {%>
+      <p class="error-msg"><%= errors[i] %></p>
+    <%}%>
+
+    <form action="/client-contact-details" method="post">
+      <input type="hidden" name='_method' value="put">
+      <div class="row job-div">
+        <div class="col">
+          <input type="text" class="form-control" name="emergencyContactName" placeholder="*Emergency Contact Full Name">
+        </div>
+      </div>
+
+      <div class="row job-div">
+        <div class="col">
+          <input type="tel" class="form-control" name="emergencyContactTelNo" placeholder="*Emergency Contact Telephone Number">
+        </div>
+      </div>
+
+      <div class="row job-div">
+        <div class="col">
+          <input type="text" class="form-control" name="emergencyContactRelation" placeholder="*Relation to you">
+        </div>
+      </div>
+
+      <div class="row jov-div">
+        <div class="col">
+          <button type="button" class="btn btn-primary btn-lg add-contact-btn" data-toggle="modal" data-target="#modalLarge5"><i class="fas fa-address-book"></i>  Add Contact</button>
+        </div>
+      </div>
+
+      <div class="modal fade modal-fullscreen" id="modalLarge5" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title" id="modalLargeLabel">Confirm Details</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure the details of this new contact are correct?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Let me double check</button>
+        <button type="submit" class="btn btn-primary" data-glyphicon="glyphicon-ok"><i class="fas fa-address-book"></i>  Add</button>
+      </div>
+      </div>
+      </div>
+      </div>
+
+    </form>
+  </div>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <button type="button" class="btn btn-secondary go-back-button"><a href="/client-home"><i class="fas fa-arrow-left"></i>  Go Back</a></button>
+  </body>
+</html>

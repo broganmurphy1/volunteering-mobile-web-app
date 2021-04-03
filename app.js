@@ -138,6 +138,11 @@ app.post("/client-create-account", function(req, res){
           clientAddressTwo: req.body.clientAddressTwo,
           clientCity: req.body.clientCity,
           clientMedCondition: req.body.clientMedCondition,
+          clientEmergencyContact: {
+            contactName: "",
+            contactTelNo: "",
+            relationToClient: ""
+          },
           username: req.body.clientEmail,
           password: req.body.clientPassword
         });
@@ -356,6 +361,168 @@ app.delete("/jobs/:jobId", function(req, res){
     }
   });
 })
+
+app.get("/client-contact-details", ensureAuthenticated, function(req, res){
+  const errors = req.flash().error || [];
+  console.log(req.session.user);
+
+  Client.find({_id: req.session.user._id}, function(err, clients) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      console.log(clients[0].clientEmergencyContact);
+      res.render("client-contact-details", {clients: clients, errors});
+    }
+  });
+})
+
+app.put("/client-contact-details", function(req, res){
+
+  var regex = new RegExp("((\\+44(\\s\\(0\\)\\s|\\s0\\s|\\s)?)|0)7\\d{3}(\\s)?\\d{6}");
+
+  Client.findOne({_id: req.session.user._id}, function(err, client) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      if(!req.body.emergencyContactName || !req.body.emergencyContactTelNo || !req.body.emergencyContactRelation) {
+        req.flash('error', "Please make sure all required fields are filled in");
+        res.redirect('/client-contact-details');
+      }
+      else if(!regex.test(req.body.emergencyContactTelNo)) {
+        req.flash('error', "Incorrect telephone number, please try again");
+        res.redirect('/client-contact-details');
+      }
+      else {
+        client.clientEmergencyContact.contactName = req.body.emergencyContactName;
+        client.clientEmergencyContact.contactTelNo = req.body.emergencyContactTelNo;
+        client.clientEmergencyContact.relationToClient = req.body.emergencyContactRelation;
+        client.save(function(err, updatedClient) {
+          if(err) {
+            console.log(err);
+          }
+          else {
+            console.log(updatedClient);
+            res.redirect("client-contact-details");
+          }
+        })
+      }
+    }
+  });
+})
+
+app.get("/client-emergency-contact-details/:clientId", ensureAuthenticated ,function(req, res){
+  const errors = req.flash().error || [];
+  const requestedClientId = req.params.clientId
+
+  console.log(requestedClientId);
+
+  Client.findOne({_id: requestedClientId}, function(err, client) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      res.render("client-contact", {
+        clientContactName: client.clientEmergencyContact.contactName,
+        clientContactTelNo: client.clientEmergencyContact.contactTelNo,
+        clientContactRelation: client.clientEmergencyContact.relationToClient,
+        clientID: client._id,
+        errors
+      })
+    }
+  })
+})
+
+app.put("/client-emergency-contact-details/:clientId", function(req, res){
+  var regex = new RegExp("((\\+44(\\s\\(0\\)\\s|\\s0\\s|\\s)?)|0)7\\d{3}(\\s)?\\d{6}");
+  const requestedClientId = req.params.clientId;
+  const split = requestedClientId.split(":");
+
+  const splitRequestedClientId = split[1];
+  console.log(splitRequestedClientId);
+
+  Client.findOne({_id: splitRequestedClientId}, function(err, client) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      if(!req.body.emergencyContactName|| !req.body.emergencyContactTelNo || !req.body.emergencyContactRelation) {
+        req.flash('error', "Please make sure all required fields are filled in");
+        res.redirect('/client-emergency-contact-details/' + splitRequestedClientId);
+      }
+      else if(!regex.test(req.body.emergencyContactTelNo)) {
+        req.flash('error', "Incorrect telephone number, please try again");
+        res.redirect('/client-emergency-contact-details/' + splitRequestedClientId);
+      }
+      else {
+        client.clientEmergencyContact.contactName = req.body.emergencyContactName;
+        client.clientEmergencyContact.contactTelNo = req.body.emergencyContactTelNo;
+        client.clientEmergencyContact.relationToClient = req.body.emergencyContactRelation;
+        client.save(function(err, savedClientContactDetails) {
+          if(err) {
+            console.log(err);
+          }
+          else {
+            console.log(savedClientContactDetails);
+            res.render("client-edit-contact-success");
+          }
+        })
+      }
+    }
+  });
+})
+
+app.delete("/client-emergency-contact-details/:clientId", function(req, res){
+  const requestedClientId = req.params.clientId;
+  const split = requestedClientId.split(":");
+
+  const splitRequestedClientId = split[1];
+  console.log(splitRequestedClientId);
+
+  Client.findOneAndUpdate({_id: splitRequestedClientId}, {"$set":{"clientEmergencyContact.contactName": req.body.blankContactName, "clientEmergencyContact.contactTelNo": req.body.blankContactTelNo, "clientEmergencyContact.relationToClient": req.body.blankContactRelation}}, function(err, result) {
+    if(err) {
+      console.log(err);
+    }
+    else{
+      res.render('client-delete-contact-success');
+      console.log(result);
+    }
+  });
+})
+
+app.get("/client-help-guide", ensureAuthenticated, function(req, res){
+  res.render("client-help-guide");
+})
+
+app.get("/client-help-guide/post-job", ensureAuthenticated, function(req, res){
+  res.render("client-hg-post-job");
+})
+
+app.get("/client-help-guide/view-job", ensureAuthenticated, function(req, res) {
+  res.render("client-hg-view-job");
+})
+
+app.get("/client-help-guide/edit-job", ensureAuthenticated, function(req, res) {
+  res.render("client-hg-edit-job");
+})
+
+app.get("/client-help-guide/delete-job", ensureAuthenticated, function(req, res) {
+  res.render("client-hg-delete-job");
+})
+
+app.get("/client-help-guide/add-contact-details", ensureAuthenticated, function(req, res) {
+  res.render("client-hg-add-contact-details");
+})
+
+app.get("/client-help-guide/edit-contact-details", ensureAuthenticated, function(req, res) {
+  res.render("client-hg-edit-contact-details");
+})
+
+app.get("/client-help-guide/delete-contact-details", ensureAuthenticated, function(req, res) {
+  res.render("client-hg-delete-contact-details");
+})
+
 
 app.listen(3000, function(){
   console.log("Server started on port 3000");
