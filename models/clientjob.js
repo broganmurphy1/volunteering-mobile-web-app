@@ -13,6 +13,11 @@ const ClientJobSchema = new mongoose.Schema({
     clientContactNumber: String,
     clientMedCondition: String
   },
+  clientEmergencyContact: {
+    contactName: String,
+    contactTelNo: String,
+    relationToClient: String
+  },
   jobStatus: String
 });
 

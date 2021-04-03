@@ -259,6 +259,11 @@ app.post("/client-post-job", function(req, res) {
           clientContactNumber: req.session.user.clientContactNumber,
           clientMedCondition: req.session.user.clientMedCondition
         },
+        clientEmergencyContact: {
+          contactName: req.session.user.clientEmergencyContact.contactName,
+          contactTelNo: req.session.user.clientEmergencyContact.contactTelNo,
+          relationToClient: req.session.user.clientEmergencyContact.relationToClient
+        },
         jobStatus: "Available"
       });
       newClientJob.save(function(err) {
