@@ -77,9 +77,11 @@ passport.deserializeUser((id, done) => {
   done(null, { id });
 });
 
+const API_KEY = process.env.API_KEY;
+
 var geocoder = nodeGeocoder({
   provider: 'opencage',
-  apiKey: process.env.API_KEY
+  apiKey: API_KEY
 });
 
 // ROUTES
