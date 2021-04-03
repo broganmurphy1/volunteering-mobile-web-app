@@ -17,7 +17,7 @@ require("dotenv").config();
 const methodOverride = require('method-override');
 
 const password = process.env.PASSWORD;
-const uri = "mongodb+srv://admin-brogan:"+ password +"@volunteerdb.nkpqs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority&ssl=true"
+const uri = "mongodb://admin-brogan:"+ password +"@volunteerdb-shard-00-00.nkpqs.mongodb.net:27017,volunteerdb-shard-00-01.nkpqs.mongodb.net:27017,volunteerdb-shard-00-02.nkpqs.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-k631wp-shard-0&authSource=admin&retryWrites=true&w=majority"
 
 mongoose.connect(uri || "mongodb://localhost:27017/VolunteerDB", {useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log('connected'))
 .catch((err)=> console.log(err));
