@@ -17,7 +17,9 @@ const nodeGeocoder = require('node-geocoder');
 require("dotenv").config();
 const methodOverride = require('method-override');
 
-mongoose.connect("mongodb://localhost:27017/VolunteerDB", {useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log('connected'))
+const uri = "mongodb+srv://admin-brogan:"+ process.env.PASSWORD +"@volunteerdb.nkpqs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+
+mongoose.connect(uri || "mongodb://localhost:27017/VolunteerDB", {useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log('connected'))
 .catch((err)=> console.log(err));
 
 const app = express();
@@ -218,6 +220,11 @@ app.post("/client-post-job", function(req, res) {
             clientName: req.session.user.clientFullName,
             clientContactNumber: req.session.user.clientContactNumber,
             clientMedCondition: req.session.user.clientMedCondition
+          },
+          clientEmergencyContact: {
+            contactName: req.session.user.clientEmergencyContact.contactName,
+            contactTelNo: req.session.user.clientEmergencyContact.contactTelNo,
+            relationToClient: req.session.user.clientEmergencyContact.relationToClient
           },
           jobStatus: "Available"
         });
