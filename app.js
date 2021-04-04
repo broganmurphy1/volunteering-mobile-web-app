@@ -190,7 +190,8 @@ app.get('/client-logout', function(req, res){
 
 app.get("/client-post-job", ensureAuthenticated, function(req, res){
   const errors = req.flash().error || [];
-  res.render("client-post-job", {googlekey: process.env.GOOGLE_API_KEY, errors});
+  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
+  res.render("client-post-job", {googlekey: GOOGLE_API_KEY, errors});
 });
 
 app.post("/client-post-job", function(req, res) {
