@@ -10,10 +10,19 @@
 <% } else { %>
   <%  jobs.forEach(function(job){ %>
     <div class="client-jobs">
+    <% if(job.clientJobDesc.length >= 14){ %>
       <h4><%=job.clientJobCategory%></h4>
-      <p><%=job.clientJobDesc.substring(0, 100) + " ..."%></p>
+      <p><%=job.clientJobDesc.substring(0, 14) + "..."%></p>
       <p>Status: <%= job.jobStatus %></p>
       <button type="button" class="btn btn-primary view-job-activity-btn" name="button"><a href="/jobs/<%=job._id%>"><i class="fas fa-eye"></i>  View Job/Activity</a></button>
+  <% } else { %>
+    <h4><%=job.clientJobCategory%></h4>
+    <p><%=job.clientJobDesc%></p>
+    <p>Status: <%= job.jobStatus %></p>
+    <button type="button" class="btn btn-primary view-job-activity-btn" name="button"><a href="/jobs/<%=job._id%>"><i class="fas fa-eye"></i>  View Job/Activity</a></button>
+  <% } %>
+
+
     </div>
       <% }) %>
 <% } %>
