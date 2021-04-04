@@ -419,6 +419,9 @@ app.put("/client-contact-details", function(req, res){
           }
           else {
             console.log(updatedClient);
+            req.session.user.clientEmergencyContact.contactName = req.body.emergencyContactName;
+            req.session.user.clientEmergencyContact.contactTelNo = req.body.emergencyContactTelNo;
+            req.session.user.clientEmergencyContact.relationToClient = req.body.emergencyContactRelation;
             res.redirect("client-contact-details");
           }
         })
@@ -480,6 +483,9 @@ app.put("/client-emergency-contact-details/:clientId", function(req, res){
           }
           else {
             console.log(savedClientContactDetails);
+            req.session.user.clientEmergencyContact.contactName = req.body.emergencyContactName;
+            req.session.user.clientEmergencyContact.contactTelNo = req.body.emergencyContactTelNo;
+            req.session.user.clientEmergencyContact.relationToClient = req.body.emergencyContactRelation;
             res.render("client-edit-contact-success");
           }
         })
@@ -500,6 +506,9 @@ app.delete("/client-emergency-contact-details/:clientId", function(req, res){
       console.log(err);
     }
     else{
+      req.session.user.clientEmergencyContact.contactName = '';
+      req.session.user.clientEmergencyContact.contactTelNo = '';
+      req.session.user.clientEmergencyContact.relationToClient = '';
       res.render('client-delete-contact-success');
       console.log(result);
     }

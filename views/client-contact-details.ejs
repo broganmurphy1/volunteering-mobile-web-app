@@ -4,7 +4,7 @@
   <h1 class="client-job-activity-header">Your emergency contact:</h1>
       <% if(!clients[0].clientEmergencyContact.contactName){ %>
         <div id="noJobDiv" class="no-job-div">
-          <p class="no-job-text">You have not added an emergency contact, you can do so below.</p>
+          <p class="no-job-text">You have not added an emergency contact, you can do so below. You will be logged out when you add your contact.</p>
         </div>
 <% } else { %>
   <%  clients.forEach(function(client){ %>
