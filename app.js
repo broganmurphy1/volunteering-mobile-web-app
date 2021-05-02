@@ -4,12 +4,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
-const bcrypt = require("bcrypt");
 const passport = require('passport');
 LocalStrategy = require("passport-local");
 passportLocalMongoose = require("passport-local-mongoose");
 Client = require("./models/client");
 ClientJob = require("./models/clientjob");
+Volunteer = require("./models/volunteer");
 const flash = require("connect-flash");
 const session = require('express-session');
 const nodeGeocoder = require('node-geocoder');
@@ -104,6 +104,7 @@ app.get("/client-create-account", function(req, res){
 app.post("/client-create-account", function(req, res){
 
   var regex = new RegExp("((\\+44(\\s\\(0\\)\\s|\\s0\\s|\\s)?)|0)7\\d{3}(\\s)?\\d{6}");
+  var emailRegex = new RegExp("^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
 
   if (!req.body.clientFullName
     || !req.body.clientContactNumber
@@ -118,6 +119,10 @@ app.post("/client-create-account", function(req, res){
   }
   else if (!regex.test(req.body.clientContactNumber)) {
     req.flash('error', 'Incorrect contact number, please try again');
+    res.redirect("client-create-account");
+  }
+  else if (!emailRegex.test(req.body.clientEmail)) {
+    req.flash('error', 'Incorrect email address format, please try again');
     res.redirect("client-create-account");
   }
   else if(req.body.clientPassword !== req.body.clientConfirmPassword) {
@@ -329,12 +334,14 @@ app.put("/jobs/:jobId", function(req, res){
   const splitRequestedJobId = split[1];
   console.log(splitRequestedJobId);
 
+  var postcodeRegex = new RegExp("^([A-Z]{1,2}\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$")
+
   ClientJob.findOne({_id: splitRequestedJobId}, function(err, job) {
     if(err) {
       console.log(err);
     }
     else {
-      if(!req.body.clientJobLocation || !req.body.clientJobDesc) {
+      if(!req.body.clientJobLocation || !req.body.clientJobDesc || !postcodeRegex.test(req.body.clientJobLocation)) {
         req.flash('error', "Please make sure all required fields are filled in and you have specified your location correctly");
         res.redirect('/jobs/' + splitRequestedJobId);
       }
@@ -547,6 +554,72 @@ app.get("/client-help-guide/delete-contact-details", ensureAuthenticated, functi
   res.render("client-hg-delete-contact-details");
 })
 
+//Volunteer ROUTES
+
+app.get("/volunteer-login", function(req, res){
+  const errors = req.flash().error || [];
+  res.render("volunteer-login", {errors});
+})
+
+app.get("/volunteer-create-account", function(req, res){
+  const errors = req.flash().error || [];
+  res.render("volunteer-create-account", {errors});
+})
+
+app.post("/volunteer-create-account", function(req, res){
+
+  var regex = new RegExp("((\\+44(\\s\\(0\\)\\s|\\s0\\s|\\s)?)|0)7\\d{3}(\\s)?\\d{6}");
+  var emailRegex = new RegExp("^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
+
+  if (!req.body.volunteerFullName
+    || !req.body.volunteerContactNumber
+    || !req.body.volunteerEmail
+    || !req.body.volunteerPassword
+    || !req.body.volunteerConfirmPassword) {
+    req.flash('error', 'Please fill out all required fields');
+    res.redirect("volunteer-create-account");
+  }
+  else if (!regex.test(req.body.volunteerContactNumber)) {
+    req.flash('error', 'Incorrect contact number, please try again');
+    res.redirect("volunteer-create-account");
+  }
+  else if (!emailRegex.test(req.body.volunteerEmail)) {
+    req.flash('error', 'Incorrect email address format, please try again');
+    res.redirect("volunteer-create-account");
+  }
+  else if(req.body.volunteerPassword !== req.body.volunteerConfirmPassword) {
+    req.flash('error', "Passwords do not match, please try again");
+    res.redirect("volunteer-create-account");
+  }
+  else {
+    Volunteer.findOne({username: req.body.clientEmail}, function(err, user) {
+      if(err) {
+        console.log(err);
+      }
+      if(user) {
+        req.flash('error', "Sorry, this email is already registered, please try another");
+        res.redirect("volunteer-create-account");
+      }
+      else {
+        const newVolunteer = new Volunteer({
+          volunteerFullName: req.body.volunteerFullName,
+          volunteerContactNumber: req.body.volunteerContactNumber,
+          username: req.body.volunteerEmail,
+          password: req.body.volunteerPassword
+        });
+
+        newVolunteer.save(function(err) {
+          if(err){
+            console.log(err);
+          }
+          else{
+            res.render("volunteer-create-account-success", {newUser: req.body.volunteerFullName});
+          }
+        })
+      }
+    });
+  }
+})
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Server started on port 3000");
