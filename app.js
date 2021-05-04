@@ -752,22 +752,6 @@ app.put("/volunteerjobs/:jobId", function(req, res){
       console.log(err);
     }
     else {
-        job.jobStatus = "Accepted"
-        var confirmationEmail = {
-          from: 'broganmurphy1@live.co.uk',
-          to: req.session.user.username,
-          subject: 'You have accepted a job',
-          text: 'You have accepted the job ' + job.clientJobCategory + ': ' + job.clientJobDesc
-          + '\nThe client will be in touch with you.'
-        };
-
-        transporter.sendMail(confirmationEmail, function(error, info){
-          if (error) {
-            console.log(error);
-          } else {
-            console.log('Email sent: ' + info.response);
-          }
-        });
         job.save(function(err, savedJob) {
           if(err) {
             console.log(err);
@@ -794,6 +778,22 @@ app.put("/volunteerjobs/:jobId", function(req, res){
             res.render("volunteer-accept-job-success");
           }
       })
+      job.jobStatus = "Accepted"
+      var confirmationEmail = {
+        from: 'broganmurphy1@live.co.uk',
+        to: req.session.user.username,
+        subject: 'You have accepted a job',
+        text: 'You have accepted the job ' + job.clientJobCategory + ': ' + job.clientJobDesc
+        + '\nThe client will be in touch with you.'
+      };
+
+      transporter.sendMail(confirmationEmail, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
     }
   });
 })
