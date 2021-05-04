@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+
+  <h1 class="client-job-activity-header">Available Jobs:</h1>
+      <% if(jobs.length === 0){ %>
+        <div class="no-job-div">
+          <p class="no-job-text">No jobs available</p>
+        </div>
+<% } else { %>
+  <%  jobs.forEach(function(job){ %>
+    <div class="client-jobs">
+    <% if(job.clientJobDesc.length >= 14){ %>
+      <h4><%=job.clientJobCategory%></h4>
+      <p><%=job.clientJobDesc.substring(0, 14) + "..."%></p>
+      <p>Status: <%= job.jobStatus %></p>
+      <button type="button" class="btn btn-primary view-job-activity-btn" name="button"><a href="/volunteerjobs/<%=job._id%>"><i class="fas fa-eye"></i>  View Job/Activity</a></button>
+  <% } else { %>
+    <h4><%=job.clientJobCategory%></h4>
+    <p><%=job.clientJobDesc%></p>
+    <p>Status: <%= job.jobStatus %></p>
+    <button type="button" class="btn btn-primary view-job-activity-btn" name="button"><a href="/volunteerjobs/<%=job._id%>"><i class="fas fa-eye"></i>  View Job/Activity</a></button>
+  <% } %>
+
+
+    </div>
+      <% }) %>
+<% } %>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <button type="button" class="btn btn-secondary go-back-button"><a href="/volunteer-get-postcode"><i class="fas fa-arrow-left"></i>  Go Back</a></button>
+  </body>
+  </html>

@@ -263,3 +263,20 @@ a {
   font-size: 15pt;
   white-space: normal;
 }
+
+
+/* volunteer home page */
+
+.view-available-jobs-button {
+  height: 75px;
+  width: 275px;
+  margin: 10px;
+  font-size: 20pt;
+}
+
+.view-completed-jobs-button {
+  height: 75px;
+  width: 300px;
+  margin: 10px;
+  font-size: 20pt;
+}

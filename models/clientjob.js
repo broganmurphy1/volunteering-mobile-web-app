@@ -4,13 +4,14 @@ const ClientJobSchema = new mongoose.Schema({
   clientJobCategory: String,
   location: {
     type: {type: String},
-    coordinates: []
+    coordinates: [],
   },
   clientJobDesc: String,
   clientDetails: {
     clientID: String,
     clientName: String,
     clientContactNumber: String,
+    clientEmailAddress: String,
     clientMedCondition: String
   },
   clientEmergencyContact: {

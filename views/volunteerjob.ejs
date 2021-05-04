@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h4><%=jobCategory%></h4>
+
+  <form action="/volunteerjobs/:<%=jobID%>" method="post">
+  <input type="hidden" name='_method' value="put">
+      <div class="row job-div">
+        <div class="col">
+          <p><%=jobLocation%></p>
+        </div>
+      </div>
+
+      <input type="hidden" name="clientJobCountry" value="United Kingdom">
+
+      <div class="row job-div">
+        <div class="col">
+          <p><%=jobDescription%></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col" id="mapholder"></div>
+      </div>
+
+      <div class="row job-div">
+        <div class="col">
+          <button type="button" class="btn btn-success btn-lg edit-btn" data-toggle="modal" data-target="#modalLargeAcceptJob"><i class="fas fa-check"></i>  Accept Job</button>
+        </div>
+      </div>
+
+      <div class="modal fade modal-fullscreen" id="modalLargeAcceptJob" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title" id="modalLargeLabel">Confirm Details</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to accept this job? This action cannot be reverted</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Let me double check</button>
+        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i>  Accept Job</button>
+      </div>
+      </div>
+      </div>
+      </div>
+
+  </form>
+
+  <form method="post" action="/volunteernotinterested/:<%=jobID%>">
+    <input type="hidden" name="_method" value="put">
+
+    <div class="row job-div">
+      <div class="col">
+        <button type="button" class="btn btn-secondary btn-lg delete-btn" data-toggle="modal" data-target="#modalLargeNotInterested"><i class="fas fa-times"></i>  Not Interested<a> </button>
+      </div>
+    </div>
+
+    <div class="modal fade modal-fullscreen" id="modalLargeNotInterested" tabindex="-1" role="dialog" aria-labelledby="modalLargeLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalLargeLabel">Confirm Action</h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you're not interested in this type of job?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Go back</button>
+            <button type="submit" class="btn btn-secondary"><i class="fas fa-times"></i>  Not Interested<a> </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  <script src="https://maps.google.com/maps/api/js?key=<%= googlekey %>"></script>
+  <script>
+
+      var lat = <%=jobLat%>;
+      var lon = <%=jobLon%>;
+      var latlon = new google.maps.LatLng(lat, lon)
+      console.log(latlon);
+      var mapholder = document.getElementById('mapholder')
+      mapholder.style.height = '200px';
+      mapholder.style.width = '250px';
+
+      var myOptions = {
+        center:latlon,zoom:10,
+        mapTypeId:google.maps.MapTypeId.ROADMAP,
+        mapTypeControl:false,
+        navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+      }
+
+      var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+      var marker = new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+
+
+  </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <button type="button" onclick="history.back(-1)" class="btn btn-secondary go-back-button"><i class="fas fa-arrow-left"></i>  Go Back</a></button>
+  </body>
+</html>

@@ -10,6 +10,7 @@ var hash_password = function( password ) {
 const VolunteerSchema = new mongoose.Schema({
   volunteerFullName: String,
   volunteerContactNumber: String,
+  volunteerNotInterested: [],
   username: String,
   password: String
 });

@@ -15,6 +15,7 @@ const session = require('express-session');
 const nodeGeocoder = require('node-geocoder');
 require("dotenv").config();
 const methodOverride = require('method-override');
+const nodemailer = require('nodemailer');
 
 const password = process.env.PASSWORD;
 const uri = "mongodb://admin-brogan:"+ password +"@volunteerdb-shard-00-00.nkpqs.mongodb.net:27017,volunteerdb-shard-00-01.nkpqs.mongodb.net:27017,volunteerdb-shard-00-02.nkpqs.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-k631wp-shard-0&authSource=admin&retryWrites=true&w=majority"
@@ -51,11 +52,31 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy({
+passport.use('client-login', new LocalStrategy({
   passReqToCallback: true,
 },
   (req, username, password, authCheckDone) => {
     Client.findOne({username}).then(user => {
+      if(!user) {
+        return authCheckDone(null, false, req.flash('error', 'Login Issue'));
+      }
+      if (user && user.comparePassword(password)) {
+        return authCheckDone(null, user);
+      }
+      else {
+        console.log('Invalid Password');
+        return authCheckDone( null, false, req.flash('error', 'Invalid Password'));
+      }
+    });
+  }
+));
+
+//Volunteer Login Local Strategy
+passport.use('volunteer-login', new LocalStrategy({
+  passReqToCallback: true,
+},
+  (req, username, password, authCheckDone) => {
+    Volunteer.findOne({username}).then(user => {
       if(!user) {
         return authCheckDone(null, false, req.flash('error', 'Login Issue'));
       }
@@ -83,6 +104,16 @@ const API_KEY = process.env.API_KEY;
 var geocoder = nodeGeocoder({
   provider: 'opencage',
   apiKey: API_KEY
+});
+
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
+
+var transporter = nodemailer.createTransport({
+  service: '"Outlook365"',
+  auth: {
+    user: 'broganmurphy1@live.co.uk',
+    pass: EMAIL_PASSWORD
+  }
 });
 
 // ROUTES
@@ -169,7 +200,7 @@ app.post("/client-create-account", function(req, res){
   }
 })
 
-app.post("/client-login", passport.authenticate('local', {
+app.post("/client-login", passport.authenticate('client-login', {
   failureFlash: true,
   failureRedirect: '/client-login'
 }), (req, res, next) => {
@@ -215,17 +246,19 @@ app.post("/client-post-job", function(req, res) {
         console.log(req.session.user);
         var lat = results[0].latitude;
         var lon = results[0].longitude;
+        console.log(results[0]);
 
         const newClientJob = new ClientJob({
           clientJobCategory: req.body.clientJobCategory,
           location: {
             type: "Point",
-            coordinates: [parseFloat(lat), parseFloat(lon)]
+            coordinates: [parseFloat(lat), parseFloat(lon)],
           },
           clientJobDesc: req.body.clientJobDesc,
           clientDetails: {
             clientID: req.session.user._id,
             clientName: req.session.user.clientFullName,
+            clientEmailAddress: req.session.user.username,
             clientContactNumber: req.session.user.clientContactNumber,
             clientMedCondition: req.session.user.clientMedCondition
           },
@@ -271,6 +304,7 @@ app.post("/client-post-job", function(req, res) {
         clientDetails: {
           clientID: req.session.user._id,
           clientName: req.session.user.clientFullName,
+          clientEmailAddress: req.session.user.username,
           clientContactNumber: req.session.user.clientContactNumber,
           clientMedCondition: req.session.user.clientMedCondition
         },
@@ -592,7 +626,7 @@ app.post("/volunteer-create-account", function(req, res){
     res.redirect("volunteer-create-account");
   }
   else {
-    Volunteer.findOne({username: req.body.clientEmail}, function(err, user) {
+    Volunteer.findOne({username: req.body.volunteerEmail}, function(err, user) {
       if(err) {
         console.log(err);
       }
@@ -620,6 +654,194 @@ app.post("/volunteer-create-account", function(req, res){
     });
   }
 })
+
+app.post("/volunteer-login", passport.authenticate('volunteer-login', {
+  failureFlash: true,
+  failureRedirect: '/volunteer-login'
+}), (req, res, next) => {
+   req.session.user = req.user;
+   console.log("ok");
+   console.log(req.session.user);
+   res.render("volunteer-home", {user: req.user.volunteerFullName});
+})
+
+const ensureVolunteerAuthenticated = (req, res, next) => {
+  if(req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/volunteer-login");
+}
+
+app.get("/volunteer-home", ensureVolunteerAuthenticated, function(req, res) {
+    res.render("volunteer-home", {user: req.session.user.volunteerFullName});
+    console.log(req.session.user);
+})
+
+app.get("/volunteer-get-postcode", ensureVolunteerAuthenticated, function(req, res) {
+  const errors = req.flash().error || [];
+  res.render("volunteer-get-postcode", {errors});
+})
+
+app.post("/volunteer-get-postcode", ensureVolunteerAuthenticated, function(req, res) {
+  console.log(req.body.volunteerJobPostcode);
+
+  var postcodeRegex = new RegExp("^([A-Z]{1,2}\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$");
+  geocoder.geocode(req.body.volunteerJobPostcode, function(err, results) {
+
+  if(!req.body.volunteerJobPostcode || !postcodeRegex.test(req.body.volunteerJobPostcode)) {
+    req.flash('error', "Invalid Postcode");
+    res.redirect("volunteer-get-postcode");
+  }
+  else if (!results || results[0].country !== 'United Kingdom') {
+    req.flash('error', "Invalid Postcode");
+    res.redirect("volunteer-get-postcode");
+  }
+  else{
+      console.log(results);
+      var lat = results[0].latitude;
+      var lon = results[0].longitude;
+      console.log(lat);
+      console.log(lon);
+        ClientJob.find({location: {$near: {$geometry: {type: "Point", coordinates: [lat, lon]}, $minDistance: 0, $maxDistance: 40233}}}, function(err, jobs) {
+            var availableJobs = jobs.filter(job => job.jobStatus === "Available" && req.session.user.volunteerNotInterested.some(category => job.clientJobCategory.includes(category)) == false);
+            console.log(availableJobs);
+            res.render("volunteer-view-jobs", {jobs: availableJobs})
+        });
+      }
+    })
+})
+
+app.get("/volunteerjobs/:jobId", ensureVolunteerAuthenticated, function(req, res){
+  const errors = req.flash().error || [];
+  const requestedJobId = req.params.jobId
+  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
+  console.log(requestedJobId);
+
+  ClientJob.findOne({_id: requestedJobId}, function(err, job) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      const coordinates = job.location.coordinates[0] + ', ' + job.location.coordinates[1];
+      geocoder.geocode(coordinates, function(err, results) {
+        console.log(results);
+        res.render("volunteerjob", {
+          jobLat: job.location.coordinates[0],
+          jobLon: job.location.coordinates[1],
+          jobCategory: job.clientJobCategory,
+          jobLocation: results[0].zipcode,
+          jobDescription: job.clientJobDesc,
+          jobID: job._id,
+          googlekey: GOOGLE_API_KEY
+        })
+      })
+    }
+  })
+})
+
+app.put("/volunteerjobs/:jobId", function(req, res){
+  const requestedJobId = req.params.jobId;
+  const split = requestedJobId.split(":");
+
+  const splitRequestedJobId = split[1];
+  console.log(splitRequestedJobId);
+  console.log(req.session.user.username);
+
+  ClientJob.findOne({_id: splitRequestedJobId}, function(err, job) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+        job.jobStatus = "Accepted"
+        job.save(function(err, savedJob) {
+          if(err) {
+            console.log(err);
+          }
+          else {
+            console.log(savedJob);
+            var emailToClient = {
+              from: 'broganmurphy1@live.co.uk',
+              to: job.clientDetails.clientEmailAddress,
+              subject: 'Your job has been accepted.',
+              text: 'Your Job for ' + job.clientJobCategory + ' has been accepted. Description: '
+              + job.clientJobDesc + "\nYour volunteer is: "
+              + req.session.user.volunteerFullName + "\n Their number is: " + req.session.user.volunteerContactNumber
+              + "\nTheir email address is: " + req.session.user.username
+            };
+
+            transporter.sendMail(emailToClient, function(error, info){
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent: ' + info.response);
+              }
+            });
+
+            var confirmationEmail = {
+              from: 'broganmurphy1@live.co.uk',
+              to: req.session.user.username,
+              subject: 'You have accepted a job',
+              text: 'You have accepted the job ' + job.clientJobCategory + ': ' + job.clientJobDesc
+              + '\nThe client will be in touch with you.'
+            };
+
+            transporter.sendMail(confirmationEmail, function(error, info){
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent: ' + info.response);
+              }
+            });
+            res.render("volunteer-accept-job-success");
+          }
+      })
+    }
+  });
+})
+
+app.put("/volunteernotinterested/:jobId", function(req, res){
+  const requestedJobId = req.params.jobId;
+  const split = requestedJobId.split(":");
+
+  const splitRequestedJobId = split[1];
+  console.log(splitRequestedJobId);
+
+
+  ClientJob.findOne({_id: splitRequestedJobId}, function(err, job) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      var category = job.clientJobCategory;
+      Volunteer.findOne({_id: req.session.user._id}, function(err, volunteer) {
+        if(err){
+          console.log(err)
+        }
+        else {
+          volunteer.volunteerNotInterested.push(category);
+          console.log(req.session.user);
+          req.session.user.volunteerNotInterested.push(category);
+          console.log(req.session.user);
+          volunteer.save(function(err, updatedVolunteer){
+            if(err) {
+              console.log(err);
+            }
+            else {
+              console.log(updatedVolunteer);
+              const errors = req.flash().error || [];
+              res.render("volunteer-home");
+            }
+          });
+        }
+      })
+    }
+  });
+})
+
+app.get('/volunteer-logout', function(req, res){
+  req.logout();
+  res.redirect('/volunteer-login');
+});
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Server started on port 3000");
