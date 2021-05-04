@@ -752,6 +752,7 @@ app.put("/volunteerjobs/:jobId", function(req, res){
       console.log(err);
     }
     else {
+        job.jobStatus = "Accepted"
         job.save(function(err, savedJob) {
           if(err) {
             console.log(err);
@@ -778,7 +779,6 @@ app.put("/volunteerjobs/:jobId", function(req, res){
             res.render("volunteer-accept-job-success");
           }
       })
-      job.jobStatus = "Accepted"
       var confirmationEmail = {
         from: 'broganmurphy1@live.co.uk',
         to: req.session.user.username,
